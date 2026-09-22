@@ -1,0 +1,340 @@
+
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Web Checker | SRC d.o.o.</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        /* Osnovni slogi */
+        body {
+            background-color: #f4f7f9;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 750px;
+            margin: 20px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .top-bar { display: flex; align-items: center; justify-content: space-between; }
+        .logo { width: 150px; max-width: 100%; }
+
+        .email-label { display: block; margin: 20px 0 10px; font-weight: bold; }
+
+        input[type="email"] {
+            width: 90%;
+            padding: 12px;
+            background: #eeeeee;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        /* Gumbi v isti vrstici */
+        .button-row {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .submit-btn, .clear-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            font-size: 16px;
+            flex: 1;
+            max-width: 200px;
+        }
+
+        .submit-btn { background-color: #0096db; }
+        .clear-btn { background-color: #0096db; }
+
+        .submit-btn:hover, .clear-btn:hover {
+            background-color: #007bbd;
+            transform: translateY(-2px);
+        }
+
+        .button-hint { font-size: 13px; color: #888; margin-top: 15px; }
+
+        /* Score Card */
+        .score-card { border: 1px solid #ddd; border-radius: 10px; margin: 30px 0; overflow: hidden; text-align: center; }
+        .score-header-red { height: 8px; background: #d93025; }
+        .score-body { padding: 20px; }
+        .text-danger { color: #d93025; font-weight: bold; }
+
+        /* FAQ & Links */
+        .faq-link { color: #0096db; text-decoration: none; font-weight: bold; }
+        .back-link { display: block; margin-top: 30px; color: #666; text-decoration: none; }
+
+        .action-card { background: #eef4ff; padding: 20px; border-radius: 10px; border: 1px solid #d1e3ff; text-align: left; }
+        .pdf-btn { background: #0096db; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; margin-top: 10px; }
+
+        .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #0096db; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .hidden { display: none; }
+        .error { color: #d93025; font-weight: bold; }
+        .success-msg { color: #188038; font-weight: bold; font-size: 18px; margin: 30px 0; }
+        footer { margin-top: 30px; font-size: 12px; color: gray; text-align: center; }
+
+        /* Tabela rezultatov */
+        .table-container { margin: 20px 0; overflow-x: auto; }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .results-table th, .results-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .results-table th {
+            background-color: #f8f9fa;
+            color: #333;
+            font-weight: bold;
+            border-bottom: 2px solid #0096db;
+        }
+
+        .results-table tr:hover { background-color: #f1f7ff; }
+
+        .breach-name {
+            font-family: monospace;
+            color: #0e1722;
+            font-weight: bold;
+        }
+
+        .breach-fields { font-size: 14px; color: #555; }
+
+        .badge-unverified {
+            display: inline-block;
+            font-size: 11px;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: normal;
+            color: #8a6d00;
+            background: #fff3cd;
+            border: 1px solid #ffe69c;
+            border-radius: 4px;
+            padding: 1px 6px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        /* Prilagoditev za mobilne naprave */
+        @media (max-width: 600px) {
+            .container { padding: 15px; margin: 10px auto; }
+            h1 { font-size: 22px; }
+
+            .button-row {
+                flex-direction: column; /* Gumbi drug pod drugim na telefonu */
+                gap: 10px;
+            }
+
+            .submit-btn, .clear-btn {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            input[type="email"] {
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .results-table th, .results-table td {
+                padding: 8px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container animate__animated animate__fadeIn">
+        <div class="top-bar">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="SRC d.o.o. logo" class="logo">
+            <a href="/faq" class="faq-link">❓ Pomoč in FAQ</a>
+        </div>
+
+        <h1>🔍 Dark Web Checker</h1>
+        <p class="description">Preverite, ali so vaši podatki bili del vdorov in so objavljeni na temnem spletu!</p>
+
+        <form method="POST" onsubmit="showSpinner()" class="search-form">
+            <label for="email" class="email-label">Vpišite vaš e-poštni naslov:</label>
+            <input type="email" name="email" id="email"
+                   placeholder="vnesite@email.si" required
+                   autocomplete="off"
+                   aria-label="E-poštni naslov za preverjanje"
+                   value="{{ request.form.get('email', '') }}">
+
+            <div class="button-row">
+                <button type="submit" class="submit-btn" aria-label="Preveri e-naslov">🔍 Preveri zdaj!</button>
+                <button type="button" onclick="clearForm()" class="clear-btn" aria-label="Počisti obrazec">🗑️ Počisti!</button>
+            </div>
+            <p class="button-hint">
+                Vaš e-naslov posredujemo storitvi LeakCheck.io izključno za to preverjanje.
+                <b>Sami ga ne shranjujemo.</b>
+            </p>
+        </form>
+
+        <div id="spinner" class="spinner hidden" role="status" aria-live="polite"></div>
+
+        <div id="resultsContainer">
+            {% if error %}
+                <p class="error animate__animated animate__headShake" role="alert">❌ {{ error }}</p>
+            {% endif %}
+
+            {% if results is not none %}
+                {% if results %}
+                    <div class="animate__animated animate__slideInUp">
+                        <div class="score-card">
+                            <div class="score-header-red"></div>
+                            <div class="score-body">
+                                <h2>Stopnja ogroženosti: <span class="text-danger">VISOKA</span></h2>
+                                <p>Vaši podatki so bili najdeni v <strong>{{ results|length }}</strong> različnih virih.</p>
+                            </div>
+                        </div>
+
+                        <div class="table-container">
+                            <table class="results-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Vir uhajanja (Breach source)</th>
+                                        <th>Datum</th>
+                                        <th>Razkriti podatki</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for source in results %}
+                                    <tr>
+                                        <td>{{ loop.index }}</td>
+                                        <td class="breach-name"
+                                            data-date="{{ source.date }}"
+                                            data-fields="{{ source.fields | join(', ') }}">
+                                            {{ source.name }}
+                                            {% if source.unverified %}
+                                                <span class="badge-unverified" title="Nepotrjen vir">nepotrjeno</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ source.date }}</td>
+                                        <td class="breach-fields">
+                                            {% if source.fields %}
+                                                {{ source.fields | join(', ') }}
+                                            {% else %}—{% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="action-card">
+                            <h2>🛡️ Kaj storiti zdaj?</h2>
+                            <ol>
+                                <li><strong>Takoj spremenite geslo:</strong> Povsod, kjer uporabljate isto geslo.</li>
+                                <li><strong>Omogočite 2FA:</strong> Vklopite dvofaktorsko avtentikacijo.</li>
+                                <li><strong>Uporabite Password Manager:</strong> Za varno shranjevanje gesel.</li>
+                            </ol>
+                            <button onclick="exportPDF()" class="pdf-btn">📄 Prenesi PDF s Checklisto</button>
+                        </div>
+                    </div>
+                {% else %}
+                    <p class="success-msg animate__animated animate__fadeIn">✅ Vaš e-naslov ni bil najden v bazah vdorov.</p>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 Dark Web Credential Checker | Developed by <a href="https://SRC.si" target="_blank" rel="noopener">SRC d.o.o.</a></p>
+    </footer>
+
+    <script>
+        function showSpinner() {
+            var s = document.getElementById('spinner');
+            if (s) s.classList.remove('hidden');
+        }
+
+        function clearForm() {
+            var email = document.getElementById('email');
+            if (email) email.value = '';
+            var container = document.getElementById('resultsContainer');
+            if (container) container.innerHTML = '';
+        }
+
+        function exportPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const dateStr = new Date().toLocaleDateString('sl-SI');
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(18);
+            doc.setTextColor(0, 150, 219);
+            doc.text("VARNOSTNO POROCILO - SRC", 10, 20);
+
+            doc.setFontSize(10);
+            doc.setTextColor(100);
+            doc.text(`Datum: ${dateStr}`, 10, 28);
+            doc.line(10, 32, 200, 32);
+
+            doc.setFontSize(12);
+            doc.setTextColor(0);
+            doc.text("Seznam zaznanih vdorov:", 10, 45);
+
+            let y = 55;
+            const breachNames = document.querySelectorAll('.breach-name');
+
+            breachNames.forEach((item, i) => {
+                const name = item.childNodes[0].textContent.trim();
+                const date = item.getAttribute('data-date') || '';
+                const fields = item.getAttribute('data-fields') || '';
+
+                doc.setFont("helvetica", "bold");
+                doc.text(`${i + 1}. ${name}`, 15, y);
+                y += 6;
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(10);
+                if (date) { doc.text(`   Datum: ${date}`, 15, y); y += 5; }
+                if (fields) { doc.text(`   Razkriti podatki: ${fields}`, 15, y); y += 5; }
+                doc.setFontSize(12);
+                y += 4;
+
+                if (y > 265) { doc.addPage(); y = 20; }
+            });
+
+            y += 10;
+            doc.setFillColor(240, 240, 240);
+            doc.rect(10, y, 190, 45, 'F');
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(12);
+            doc.text("VARNOSTNI KONTROLNI SEZNAM:", 15, y + 10);
+            doc.setFont("helvetica", "normal");
+            doc.text("[  ] Zamenjava gesla na ogrozenih racunih", 15, y + 20);
+            doc.text("[  ] Vklop dvofaktorske avtentikacije (2FA)", 15, y + 30);
+            doc.text("[  ] Preverjanje podvojenih gesel drugje", 15, y + 40);
+
+            doc.save("SRC_Varnostno_Porocilo.pdf");
+        }
+    </script>
+</body>
+</html>
