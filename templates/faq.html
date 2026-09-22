@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Pogosta vprašanja | SRC d.o.o.</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        /* Osnovni slogi (prej styles.css) */
+        body {
+            background-color: #f4f7f9;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 10px;
+        }
+        .container {
+            max-width: 750px;
+            margin: 20px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        footer { margin-top: 30px; font-size: 12px; color: gray; text-align: center; }
+        footer a { color: inherit; }
+        @media (max-width: 600px) {
+            .container { padding: 15px; margin: 10px auto; }
+            h1 { font-size: 22px; }
+        }
+
+        /* Specifični stili za FAQ stran */
+        .faq-container {
+            text-align: left;
+            margin-top: 30px;
+        }
+        .faq-item {
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
+        }
+        .faq-question {
+            width: 100%;
+            padding: 15px;
+            background: #f8f9fa;
+            border: none;
+            text-align: left;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s;
+            color: #333;
+        }
+        .faq-question:hover {
+            background: #eef4ff;
+        }
+        .faq-answer {
+            padding: 0 15px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease;
+            background: #fff;
+            color: #555;
+            line-height: 1.6;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 500px; /* Dovolj visoko za poljubno besedilo */
+            padding: 15px;
+            border-top: 1px solid #eee;
+        }
+        .faq-item.active .faq-question {
+            background: #eef4ff;
+            color: #0096db;
+        }
+        .back-nav {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .back-link {
+            text-decoration: none;
+            color: #0096db;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        h1 {
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container animate__animated animate__fadeIn">
+        <div class="back-nav">
+            <a href="/" class="back-link">← Nazaj na iskalnik</a>
+        </div>
+
+        <h1>❓ Pogosta vprašanja</h1>
+        <p>Vse, kar morate vedeti o varnosti vaših podatkov in delovanju sistema.</p>
+
+        <div class="faq-container">
+            <div class="faq-item">
+                <button class="faq-question">1. Kaj sploh je "Dark Web" oziroma temni splet? <span>+</span></button>
+                <div class="faq-answer">
+                    <p>Temni splet je del interneta, ki ni viden običajnim iskalnikom (kot je Google). Zaradi anonimnosti ga nepridipravi pogosto uporabljajo za prodajo in izmenjavo ukradenih podatkov, kot so e-poštni naslovi in gesla.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">2. Kako deluje ta aplikacija? <span>+</span></button>
+                <div class="faq-answer">
+                    <p>Aplikacija uporablja varen dostop do obsežnih baz podatkov, ki vsebujejo milijarde zapisov iz preteklih vdorov. Ko vpišete svoj e-naslov, sistem preveri, ali se ta ujema s katerim koli zapisom v teh bazah.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">3. Ali aplikacija shranjuje moj e-poštni naslov? <span>+</span></button>
+                <div class="faq-answer">
+                    <p>Ne shranjujemo ga v svoje baze in ga ne uporabljamo v marketinške namene. Vaš e-naslov posredujemo izključno storitvi LeakCheck.io, ki opravi preverjanje v svojih bazah vdorov (deluje kot obdelovalec podatkov). Naslov se uporabi le za trenutno poizvedbo.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">4. Kaj pomeni, če so bili moji podatki najdeni? <span>+</span></button>
+                <div class="faq-answer">
+                    <p>To pomeni, da je bila spletna storitev, ki ste jo uporabljali v preteklosti, tarča hekerskega napada. Vaši prijavni podatki iz tistega časa (e-pošta, geslo, ipd.) so verjetno javno dostopni na hekerskih forumih.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">5. Ali moram takoj zamenjati geslo? <span>+</span></button>
+                <div class="faq-answer">
+                    <p><strong>Da.</strong> Če še vedno uporabljate isto geslo, kot ste ga imeli ob času vdora, ga nemudoma zamenjajte. To velja tudi za vse druge račune, kjer morda uporabljate enako geslo.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">6. Kaj je "Stopnja ogroženosti" v rezultatih? <span>+</span></button>
+                <div class="faq-answer">
+                    <p>Stopnja ogroženosti temelji na številu najdenih virov. Več vdorov kot zaznamo za vaš naslov, večja je verjetnost, da so vaši podatki v rokah nepooblaščenih oseb.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">7. Zakaj bi moral uporabljati 2FA (dvofaktorsko avtentikacijo)? <span>+</span></button>
+                <div class="faq-answer">
+                    <p>2FA doda dodatno plast varnosti. Tudi če heker pozna vaše geslo, ne more dostopati do vašega računa brez dodatne kode, ki jo prejmete na telefon.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">8. Katere podatke lahko preverim? <span>+</span></button>
+                <div class="faq-answer">
+                    <p>Aplikacija preverja e-poštne naslove, saj so ti najpogostejši ključ do spletnih identitet. V rezultatih poleg vira vdora prikažemo tudi datum in vrsto razkritih podatkov (npr. geslo, uporabniško ime, telefonska številka), kjer je ta podatek na voljo.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">9. Kako pogosto naj preverjam svoj naslov? <span>+</span></button>
+                <div class="faq-answer">
+                    <p>Priporočljivo je, da preverjanje opravite vsaj enkrat na nekaj mesecev ali takoj, ko slišite za nov večji vdor v priljubljeno storitev.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">10. Kaj naj storim, če PDF kaže veliko vdorov? <span>+</span></button>
+                <div class="faq-answer">
+                    <p>Brez panike. Sledite kontrolnemu seznamu v PDF-ju: zamenjajte gesla, vklopite 2FA in začnite uporabljati upravljalnik gesel (Password Manager).</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 Dark Web Credential Checker | <a href="https://SRC.si" target="_blank" rel="noopener" style="color: inherit;">SRC d.o.o.</a></p>
+    </footer>
+
+    <script>
+        // Logika za odpiranje/zapiranje vprašanj (Accordion)
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const faqItem = button.parentElement;
+                faqItem.classList.toggle('active');
+
+                // Spremeni simbol + / -
+                const span = button.querySelector('span');
+                span.textContent = faqItem.classList.contains('active') ? '−' : '+';
+            });
+        });
+    </script>
+</body>
+</html>
